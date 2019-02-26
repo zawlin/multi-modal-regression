@@ -33,7 +33,6 @@ class ImagesAll(Dataset):
                 self.list_image_names = []
                 for i in range(self.num_classes):
                         tmp = spio.loadmat(os.path.join(self.db_path, self.classes[i] + '_info'), squeeze_me=True)
-                        print(tmp)
                         image_names = tmp['image_names']
                         self.list_image_names.append(image_names)
                 self.num_images = np.array([len(self.list_image_names[i]) for i in range(self.num_classes)])

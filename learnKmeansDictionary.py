@@ -14,7 +14,7 @@ import progressbar
 import sys
 
 # relevant paths
-image_path = 'data/original'
+image_path = 'data/flipped_new/train'
 
 # relevant variables
 num_clusters = int(sys.argv[1])
@@ -43,8 +43,8 @@ kmeans.fit(ydata)
 print(kmeans.cluster_centers_)
 
 # save output
-fid = open(kmeans_file, 'wb')
-pickle.dump(kmeans, fid)
+with open(kmeans_file, "wb") as fid:
+    pickle.dump(kmeans, fid)
 
 del kmeans
 
