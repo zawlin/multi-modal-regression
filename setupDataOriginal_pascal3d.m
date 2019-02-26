@@ -1,4 +1,4 @@
-function setupDataOriginal_pascal3d(cls, db_path, voc_dir)
+function setupDataOriginal_pascal3d(cls)
 % function to setup pascal3d+ data. Read the data from PASCAL3D+_release1.1
 % stored in db_path. Save resized patch inside ground truth bounding box.
 % Usage: setupDataOriginal_pascal3d(cls, db_path, voc_dir);
@@ -9,6 +9,9 @@ function setupDataOriginal_pascal3d(cls, db_path, voc_dir)
 clc;
 % paths and variables
 save_dir = 'data/original';		% where all this will be stored. change or setup a symbolic link if necessary
+
+db_path = 'data/pascal3d';
+voc_dir = 'data/pascal3d/PASCAL/VOCdevkit/VOC2012';
 save_location = fullfile(save_dir, cls);
 if ~exist(save_location, 'dir'), mkdir(save_location); end
 patch_size = [224, 224];

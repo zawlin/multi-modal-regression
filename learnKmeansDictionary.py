@@ -14,7 +14,7 @@ import progressbar
 import sys
 
 # relevant paths
-image_path = 'data/renderforcnn'
+image_path = 'data/original'
 
 # relevant variables
 num_clusters = int(sys.argv[1])
@@ -22,7 +22,7 @@ print('num_clusters: ', num_clusters)
 kmeans_file = 'data/kmeans_dictionary_axis_angle_' + str(num_clusters) + '.pkl'
 
 # setup data loader to access the images
-train_data = ImagesAll(image_path, 'render')
+train_data = ImagesAll(image_path, 'real')
 image_names = np.concatenate(train_data.list_image_names)
 
 # get pose targets from training data
