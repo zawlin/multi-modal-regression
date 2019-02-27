@@ -17,7 +17,7 @@ import scipy.io as spio
 from scipy.spatial.distance import cdist
 import os
 import pickle
-
+import utils
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 preprocess_render = transforms.Compose([transforms.Resize([224, 224]), transforms.ToTensor(), normalize])
 preprocess_real = transforms.Compose([transforms.ToTensor(), normalize])
@@ -32,7 +32,8 @@ class ImagesAll(Dataset):
                 self.ydata_type = ydata_type
                 self.list_image_names = []
                 for i in range(self.num_classes):
-                        tmp = spio.loadmat(os.path.join(self.db_path, self.classes[i] + '_info'), squeeze_me=True)
+                        #tmp = spio.loadmat(os.path.join(self.db_path, self.classes[i] + '_info'), squeeze_me=True)
+                        tmp = utils.load(os.path.join(self.db_path,self.classes[i]+'_info.pkl'))
                         image_names = tmp['image_names']
                         self.list_image_names.append(image_names)
                 self.num_images = np.array([len(self.list_image_names[i]) for i in range(self.num_classes)])
@@ -50,7 +51,8 @@ class ImagesAll(Dataset):
                         image_name = self.image_names[i][idx % self.num_images[i]]
                         label.append(i*torch.ones(1).long())
                         # read image
-                        img_pil = Image.open(os.path.join(self.db_path, self.classes[i], image_name + '.png'))
+                        #img_pil = Image.open(os.path.join(self.db_path, self.classes[i], image_name + '.png'))
+                        img_pil = Image.open(os.path.join(image_name + '.png'))
                         xdata.append(self.preprocess(img_pil))
                         # parse image name to get correponding target
                         _, _, az, el, ct, _ = parse_name(image_name)
@@ -204,7 +206,7 @@ class TestImages(Dataset):
                 image_name = self.image_names[idx]
                 label = self.labels[idx]
                 # read image
-                img_pil = Image.open(os.path.join(self.db_path, self.classes[label], image_name + '.png'))
+                img_pil = Image.open( image_name + '.png')
                 xdata = self.preprocess(img_pil)
                 # parse image name to get correponding target
                 _, _, az, el, ct, _ = parse_name(image_name)

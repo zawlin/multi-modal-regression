@@ -1,15 +1,13 @@
 import scipy.io as spio
-from helperFunctions import parse_name
 import os
 import numpy as np
+import glob
 from helperFunctions import classes
+import utils
 
-def gen_renderforcnn():
-    pass
-
-def gen_renderforcnn():
-    src = 'data/renderforcnn_orig/'
-    dst = 'data/renderforcnn/'
+def setup_renderforcnn():
+    src = 'data/renderforcnn_orig'
+    dst = 'data/renderforcnn'
 
     classes_map = {
         '02691156':'aeroplane',
@@ -26,25 +24,36 @@ def gen_renderforcnn():
         '04468005':'tvmonitor'
         }
     for i in classes_map.keys():
-        os.system('ln -rs %s/%s %s/%s'%(src,i,dst,classes_map[i]))
+        if not os.path.exists('%s/%s'%(dst,classes_map[i])):
+            cmd = 'ln -rs %s/%s %s/%s'%(src,i,dst,classes_map[i])
+            print(cmd)
+            os.system(cmd)
 
-    dst = 'data/renderforcnn/'
-
+def gen_info_pkl_files(root):
     for cls in classes:
-        for root, dirs, files in os.walk(dst+cls):
-            pass
+        print(cls)
+        files = glob.glob(root+cls+'/**/*.png',recursive=True)
+        files = [f.replace('.png','') for f in files]
+        pkl = {'image_names':np.asarray(files,dtype='object')}
+        spio.savepkl(root+cls+'_info.pkl',pkl)
 
-
-
-def gen_pascal_flipped():
-    root = 'data/flipped_new/train/'
+def gen_info_pkl_files(root):
     for cls in classes:
-        #print(classes)
-        for _, _, files in os.walk(root+cls):
-            files = [f.replace('.png','') for f in files]
-            mat = {'image_names':np.asarray(files,dtype='object')}
-            spio.savemat(root+cls+'_info.mat',mat)
-            tmp = spio.loadmat(root+cls+'_info.mat', squeeze_me=True)
+        print(cls)
+        files = glob.glob(root+cls+'/**/*.png',recursive=True)
+        files = [f.replace('.png','') for f in files]
+        pkl = {'image_names':np.asarray(files,dtype='object')}
+        utils.save(root+cls+'_info.pkl',pkl)
 
-#gen_renderforcnn()
-gen_pascal_flipped()
+#setup_renderforcnn()
+#gen_info_pkl_files('data/renderforcnn/')
+#gen_info_pkl_files('data/augmented2/')
+#gen_info_pkl_files('data/flipped_new/train/')
+#gen_info_pkl_files('data/flipped_new/test/')
+#gen_info_pkl_files('data/test/')
+#gen_info_pkl_files('data/augmented2/')
+
+gen_info_pkl_files('data/flipped_new/test/')
+gen_info_pkl_files('data/flipped_new/train/')
+gen_info_pkl_files('data/renderforcnn/')
+gen_info_pkl_files('data/augmented2/')

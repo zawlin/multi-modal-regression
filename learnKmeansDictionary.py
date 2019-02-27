@@ -14,7 +14,7 @@ import progressbar
 import sys
 
 # relevant paths
-image_path = 'data/flipped_new/train'
+image_path = 'data/renderforcnn'
 
 # relevant variables
 num_clusters = int(sys.argv[1])
